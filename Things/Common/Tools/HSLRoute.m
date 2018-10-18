@@ -30,7 +30,8 @@
     NSUInteger lengthOfKey = key.length;
     if (lengthOfKey) {
         Class classForController = [self controllerForKey:key];
-        if (classForController) {
+        BOOL isUIViewControllerClass = [classForController isSubclassOfClass:NSClassFromString(@"UIViewController")];
+        if (classForController && isUIViewControllerClass) {
             return YES;
         }
     }
