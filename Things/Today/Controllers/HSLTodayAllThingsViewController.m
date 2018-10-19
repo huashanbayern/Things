@@ -20,6 +20,10 @@
     self.navigationItem.title = @"2018-09-06";
 }
 
+- (void)todayWithNum:(NSNumber *)num string:(NSString *)string {
+    NSLog(@"参数：%@--%@", num, string);
+}
+
 /*
 #pragma mark - Navigation
 

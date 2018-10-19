@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedRoute;
 
+- (id)routeWithKey:(NSString *)key selector:(SEL)selector arguments:(NSArray *)arguments;
 - (BOOL)canRouteToControllerForKey:(NSString *)key;
 - (void)setController:(Class)cls forKey:(NSString *)key;
 
