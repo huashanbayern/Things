@@ -22,10 +22,9 @@
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     static NSString * const key = @"today_all_things_view_controller";
-    [[HSLRoute sharedRoute] setController:NSClassFromString(@"HSLTodayAllThingsViewController") forKey:key];
     BOOL canRoute = [[HSLRoute sharedRoute] canRouteToControllerForKey: key];
     NSLog(@"是否能路由：%d", canRoute);
-    [[HSLRoute sharedRoute] routeWithKey:key selector:@selector(todayWithNum: string:) arguments:@[@(123), @"0000", @(345)]];
+    [[HSLRoute sharedRoute] routeToControllerWithKey:key selector:@selector(todayWithNum: string:) arguments:@[@(123), @"0000", @(345)]];
 }
 
 /*
