@@ -39,6 +39,8 @@
 
     [[HSLRoute sharedRoute] registerClass:@"HSLTodayAllThingsViewController" forIdentifier:key];
     [[HSLRoute sharedRoute] registerClass:@"HSLMineViewController" forIdentifier:key1];
+    Class class = [[HSLRoute sharedRoute] classForIdentifier:nil];
+    NSLog(@"class = %@", class);
 }
 
 - (void)todayWithNum:(NSNumber *)num string:(NSString *)string {

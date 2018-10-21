@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8FBCA73A41767697D983F871 /* libPods-Things.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85797AF10DC5A53CA8E6803D /* libPods-Things.a */; };
+		BF2CC11B217CCABD00CEC01F /* HSLRoute+UIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2CC11A217CCABD00CEC01F /* HSLRoute+UIViewController.m */; };
 		BF9F5CD82178DDE8006C7D0F /* HSLRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = BF9F5CD72178DDE8006C7D0F /* HSLRoute.m */; };
 		BFDC1396217B0014006B4CAE /* HSLRouteInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = BFDC1395217B0014006B4CAE /* HSLRouteInvocation.m */; };
 		BFE01BF72176F91200A51CE5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BFE01BF62176F91200A51CE5 /* AppDelegate.m */; };
@@ -45,6 +46,8 @@
 		53214A4C1ADD358D77C93B53 /* Pods-Things.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Things.release.xcconfig"; path = "Pods/Target Support Files/Pods-Things/Pods-Things.release.xcconfig"; sourceTree = "<group>"; };
 		85797AF10DC5A53CA8E6803D /* libPods-Things.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Things.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8C336C74C2DEBE214A1833E /* Pods-Things.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Things.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Things/Pods-Things.debug.xcconfig"; sourceTree = "<group>"; };
+		BF2CC119217CCABD00CEC01F /* HSLRoute+UIViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HSLRoute+UIViewController.h"; sourceTree = "<group>"; };
+		BF2CC11A217CCABD00CEC01F /* HSLRoute+UIViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "HSLRoute+UIViewController.m"; sourceTree = "<group>"; };
 		BF9F5CD62178DDE8006C7D0F /* HSLRoute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HSLRoute.h; sourceTree = "<group>"; };
 		BF9F5CD72178DDE8006C7D0F /* HSLRoute.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HSLRoute.m; sourceTree = "<group>"; };
 		BFDC1394217B0014006B4CAE /* HSLRouteInvocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HSLRouteInvocation.h; sourceTree = "<group>"; };
@@ -116,6 +119,8 @@
 			children = (
 				BF9F5CD62178DDE8006C7D0F /* HSLRoute.h */,
 				BF9F5CD72178DDE8006C7D0F /* HSLRoute.m */,
+				BF2CC119217CCABD00CEC01F /* HSLRoute+UIViewController.h */,
+				BF2CC11A217CCABD00CEC01F /* HSLRoute+UIViewController.m */,
 				BFDC1394217B0014006B4CAE /* HSLRouteInvocation.h */,
 				BFDC1395217B0014006B4CAE /* HSLRouteInvocation.m */,
 			);
@@ -464,6 +469,7 @@
 				BFE01C4D217704B700A51CE5 /* HSLThingsAppBaseViewController.m in Sources */,
 				BFE01C052176F91500A51CE5 /* main.m in Sources */,
 				BFE01C532177051C00A51CE5 /* HSLMineViewController.m in Sources */,
+				BF2CC11B217CCABD00CEC01F /* HSLRoute+UIViewController.m in Sources */,
 				BFE01C56217786EB00A51CE5 /* HSLTodayInfoView.m in Sources */,
 				BF9F5CD82178DDE8006C7D0F /* HSLRoute.m in Sources */,
 				BFE01C50217704EB00A51CE5 /* HSLTodayAllThingsViewController.m in Sources */,

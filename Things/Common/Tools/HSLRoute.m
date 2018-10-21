@@ -27,30 +27,98 @@
     return sharedRoute;
 }
 
-- (id)routeToControllerWithKey:(NSString *)key selector:(SEL)selector arguments:(NSArray *)arguments {
-    if (key && key.length) {
-        BOOL canRoute = [self canRouteToControllerForKey:key];
-        if (canRoute) {
-            Class cls = [self controllerForKey:key];
-            BOOL isSubclsOfUIViewController = [cls isSubclassOfClass:NSClassFromString(@"UIViewController")];
-            if (isSubclsOfUIViewController) {
-                if (selector) {
-                    [self invokeWithTarget:cls Selector:selector arguments:arguments];
-                } else {
-                    
-                }
-            }
+- (id)routingTargetForIdentifier:(NSString *)Identifier performSelector:(SEL)selector withArguments:(NSArray *)arguments {
+    Class target = [self classForIdentifier:Identifier];
+    return [self invokeWithTarget:target performSelector:selector withArguments:arguments];
+}
+
+//- (id)routingTarget:(Class)target performSelector:(SEL)selector withArguments:(NSArray *)arguments {
+//    if (target && [self canRouteToTarget:target]) {
+//        return [self invokeWithTarget:target performSelector:selector withArguments:arguments];
+//    }
+//    return nil;
+//}
+
+//- (id)routingController:(Class)cls performSelector:(SEL)selector withArguments:(NSArray *)arguments {
+//    BOOL canControllerBeRouted = [self canRouteToController:cls];
+//    if (canControllerBeRouted) {
+//        if (selector) {
+//            return [self invokeWithTarget:cls performSelector:selector withArguments:arguments];
+//        } else {
+//#warning 没有方法
+//            return nil;
+//        }
+//    }
+//    return nil;
+//}
+
+- (id)target:(Class)cls {
+    return [self invokeWithTarget:cls selector:nil];
+}
+
+- (id)invokeWithTarget:(Class)cls selector:(SEL)selector {
+    NSMethodSignature *methodSignature = [cls instanceMethodSignatureForSelector:selector];
+    if (methodSignature) {
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
+        id targetViewController = [[cls alloc] init];
+        invocation.target = targetViewController;
+        invocation.selector = selector;
+        [[self getCurrentVC].navigationController pushViewController:targetViewController animated:YES];
+        [invocation invoke];
+        if (methodSignature.methodReturnLength) {
+            id returnValue = nil;
+            [invocation getReturnValue:&returnValue];
+            return returnValue;
         }
     }
     return nil;
 }
 
-- (id)invokeWithTarget:(Class)classForController Selector:(SEL)selector arguments:(NSArray *)arguments {
-    NSMethodSignature *methodSignature = [classForController instanceMethodSignatureForSelector:selector];
+
+
+
+- (id)invokeWithTarget:(Class)target performSelector:(SEL)selector withArguments:(NSArray *)arguments {
+    if (target && [self canRouteToTarget:target]) {
+        id targetObj = [[target alloc] init];
+        NSMethodSignature *methodSignature = [target instanceMethodSignatureForSelector:selector];
+        if (methodSignature) {
+            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
+            invocation.target = targetObj;
+            invocation.selector = selector;
+            if (arguments) {
+                NSUInteger countOfArgumentsInArgumentsArray = arguments.count;
+                if (countOfArgumentsInArgumentsArray) {
+                    NSUInteger numberOfArgumentsInMethodSignature = methodSignature.numberOfArguments - 2;
+                    NSUInteger countOfArguments = MIN(numberOfArgumentsInMethodSignature, countOfArgumentsInArgumentsArray);
+                    if (countOfArguments) {
+                        [arguments enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                            if (idx+1 <= countOfArguments) {
+                                [invocation setArgument:&obj atIndex:idx+2];
+                            } else {
+                                *stop = YES;
+                            }
+                        }];
+                    }
+                }
+            }
+            
+            [invocation invoke];
+            if (methodSignature.methodReturnLength) {
+                id returnValue = nil;
+                [invocation getReturnValue:&returnValue];
+                return returnValue;
+            }
+        }
+    }
+    
+    return nil;
+}
+
+- (id)target:(id)targetObj selector:(SEL)selector arguments:(NSArray *)arguments {
+    NSMethodSignature *methodSignature = [target instanceMethodSignatureForSelector:selector];
     if (methodSignature) {
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
-        id targetViewController = [[classForController alloc] init];
-        invocation.target = targetViewController;
+        invocation.target = targetObj;
         invocation.selector = selector;
         if (arguments) {
             NSUInteger countOfArgumentsInArgumentsArray = arguments.count;
@@ -68,8 +136,7 @@
                 }
             }
         }
-        //                    [[self getCurrentVC] presentViewController:targetViewController animated:YES completion:nil];
-        [[self getCurrentVC].navigationController pushViewController:targetViewController animated:YES];
+        
         [invocation invoke];
         if (methodSignature.methodReturnLength) {
             id returnValue = nil;
@@ -77,8 +144,69 @@
             return returnValue;
         }
     }
-    return nil;
 }
+
+/*
+ 
+ UIViewController *controllerBeingDisplaying = [self getCurrentVC];
+ UINavigationController *currentNavigationController = controllerBeingDisplaying.navigationController;
+ if (currentNavigationController) {
+ [currentNavigationController pushViewController:targetObj animated:YES];
+ } else {
+ [controllerBeingDisplaying presentViewController:targetObj animated:YES completion:nil];
+ }
+ 
+ */
+
+
+/*
+ NSMethodSignature *methodSignature = [target instanceMethodSignatureForSelector:selector];
+ if (methodSignature) {
+ NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
+ invocation.target = targetObj;
+ invocation.selector = selector;
+ if (arguments) {
+ NSUInteger countOfArgumentsInArgumentsArray = arguments.count;
+ if (countOfArgumentsInArgumentsArray) {
+ NSUInteger numberOfArgumentsInMethodSignature = methodSignature.numberOfArguments - 2;
+ NSUInteger countOfArguments = MIN(numberOfArgumentsInMethodSignature, countOfArgumentsInArgumentsArray);
+ if (countOfArguments) {
+ [arguments enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+ if (idx+1 <= countOfArguments) {
+ [invocation setArgument:&obj atIndex:idx+2];
+ } else {
+ *stop = YES;
+ }
+ }];
+ }
+ }
+ }
+ //        [[self getCurrentVC] presentViewController:target animated:YES completion:nil];
+ //        [[self getCurrentVC].navigationController pushViewController:targetObj animated:YES];
+ [invocation invoke];
+ if (methodSignature.methodReturnLength) {
+ id returnValue = nil;
+ [invocation getReturnValue:&returnValue];
+ return returnValue;
+ }
+ }
+ */
+
+- (BOOL)canRouteToTarget:(Class)cls {
+    return cls && [cls isSubclassOfClass:[UIViewController class]] && [self.routeMutableDictionary.allValues containsObject:cls];
+}
+
+
+- (BOOL)canRouteToController:(Class)cls {
+    if (cls && [cls isSubclassOfClass:[UIViewController class]]) {
+        if ([self.routeMutableDictionary.allValues containsObject:cls]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+
 
 - (BOOL)canRouteToControllerForKey:(NSString *)key {
     return [self isSubclassOfUIViewControllerForKey:key];
@@ -173,7 +301,7 @@
     NSLog(@"路由字典1：%@", self.routeMutableDictionary);
 }
 
-- (NSString *)classForIdentifier:(NSString *)identifier {
+- (Class)classForIdentifier:(NSString *)identifier {
     return [self.routeMutableDictionary valueForKey:identifier];
 }
 
